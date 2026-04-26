@@ -1,0 +1,63 @@
+{% extends 'patient/base.html' %}
+
+{% block content %}
+
+<h2>My Reports</h2>
+<p class="text-muted">Medical records and test reports</p>
+
+<div class="row mt-4">
+
+<!-- Left Side List -->
+<div class="col-md-4">
+
+<div class="list-group" id="report-list" role="tablist">
+
+{% for r in reports %}
+<button
+class="list-group-item list-group-item-action {% if forloop.first %}active{% endif %}"
+data-bs-toggle="list"
+data-bs-target="#report{{ r.id }}"
+type="button">
+
+<strong>{{ r.report_name }}</strong><br>
+<small>{{ r.date }}</small>
+
+</button>
+{% endfor %}
+
+</div>
+
+</div>
+
+<!-- Right Side Details -->
+<div class="col-md-8">
+
+<div class="tab-content">
+
+{% for r in reports %}
+<div
+class="tab-pane fade {% if forloop.first %}show active{% endif %}"
+id="report{{ r.id }}">
+
+<div class="card p-4">
+
+<h4>{{ r.report_name }}</h4>
+<p class="text-muted">{{ r.date }}</p>
+
+<hr>
+
+<h6>Result</h6>
+<p>{{ r.result }}</p>
+
+</div>
+
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

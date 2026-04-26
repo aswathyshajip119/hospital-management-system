@@ -1,0 +1,132 @@
+{% extends 'patient/base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">Welcome {{ patient.name }}</h2>
+
+<!-- Upcoming Appointments -->
+
+<div class="card mt-4 p-4 shadow-sm border-0 rounded-4">
+
+<h4 class="mb-3 text-success">Upcoming Appointments</h4>
+
+<table class="table align-middle">
+
+<tr>
+<th>Doctor</th>
+<th>OP Time</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+
+{% for a in upcoming_appointments %}
+
+<tr>
+
+<td>
+Dr. {{ a.doctor.name }}
+</td>
+
+<td>
+{{ a.doctor.op_time|default:"Not Set" }}
+</td>
+
+<td>
+{{ a.date }}
+</td>
+
+<td>
+<span class="badge bg-success">
+{{ a.status }}
+</span>
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4">
+No upcoming appointments
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<!-- Appointment History -->
+
+<div class="card mt-4 p-4 shadow-sm border-0 rounded-4">
+
+<h4 class="mb-3 text-primary">Appointment History</h4>
+
+<table class="table align-middle">
+
+<tr>
+<th>Doctor</th>
+<th>OP Time</th>
+<th>Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for a in past_appointments %}
+
+<tr>
+
+<td>
+Dr. {{ a.doctor.name }}
+</td>
+
+<td>
+{{ a.doctor.op_time|default:"Not Set" }}
+</td>
+
+<td>
+{{ a.date }}
+</td>
+
+<td>
+{{ a.status }}
+</td>
+
+<td>
+
+{% if a.status == "Pending" %}
+
+<a href="/cancel/{{ a.id }}/"
+class="btn btn-sm btn-danger"
+onclick="return confirm('Cancel this appointment?')">
+
+Cancel
+
+</a>
+
+{% else %}
+
+-
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="5">
+No appointment history
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

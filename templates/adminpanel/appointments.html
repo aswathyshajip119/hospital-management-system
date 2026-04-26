@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Appointment Management</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+    background:#0f172a;
+    color:white;
+}
+
+.card-box{
+    background:#111827;
+    border:none;
+    border-radius:20px;
+    color:white;
+}
+
+.table{
+    color:white;
+}
+
+.table thead{
+    color:#94a3b8;
+}
+
+.btn-edit{
+    background:#f59e0b;
+    color:white;
+    border:none;
+}
+
+.btn-delete{
+    background:#ef4444;
+    color:white;
+    border:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container py-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+<h2>Appointment Management</h2>
+
+<a href="/adminpanel/dashboard/" class="btn btn-light btn-sm">
+Back Dashboard
+</a>
+
+</div>
+
+<div class="card card-box p-4">
+
+<table class="table table-hover align-middle">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Patient</th>
+<th>Doctor</th>
+<th>Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for a in appointments %}
+<tr>
+
+<td>{{ a.id }}</td>
+<td>{{ a.patient.name }}</td>
+<td>{{ a.doctor.name }}</td>
+<td>{{ a.date }}</td>
+<td>{{ a.status }}</td>
+
+<td>
+
+<a href="/adminpanel/appointment/edit/{{ a.id }}/"
+class="btn btn-sm btn-edit me-1">
+Edit
+</a>
+
+<a href="/adminpanel/appointment/delete/{{ a.id }}/"
+class="btn btn-sm btn-delete"
+onclick="return confirm('Delete this appointment?')">
+Delete
+</a>
+
+</td>
+
+</tr>
+{% empty %}
+
+<tr>
+<td colspan="6" class="text-center">
+No appointments found
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</body>
+</html>

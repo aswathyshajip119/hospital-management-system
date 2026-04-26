@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>User Management</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+    background:#0f172a;
+    color:white;
+}
+
+.card-box{
+    background:#111827;
+    border:none;
+    border-radius:20px;
+    color:white;
+}
+
+.nav-pills .nav-link{
+    color:#cbd5e1;
+}
+
+.nav-pills .nav-link.active{
+    background:#6366f1;
+}
+
+.table{
+    color:white;
+}
+
+.table thead{
+    color:#94a3b8;
+}
+
+.btn-view{
+    background:#6366f1;
+    color:white;
+    border:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container py-4">
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h2>User Management</h2>
+
+<a href="/adminpanel/dashboard/" class="btn btn-light btn-sm">
+Back to Dashboard
+</a>
+</div>
+
+<div class="card card-box p-4">
+
+<ul class="nav nav-pills mb-4">
+
+<li class="nav-item me-2">
+<button class="nav-link active"
+data-bs-toggle="pill"
+data-bs-target="#patients">
+Patients
+</button>
+</li>
+
+<li class="nav-item">
+<button class="nav-link"
+data-bs-toggle="pill"
+data-bs-target="#doctors">
+Doctors
+</button>
+</li>
+
+</ul>
+
+<div class="tab-content">
+
+<!-- Patients -->
+<div class="tab-pane fade show active" id="patients">
+
+<table class="table table-hover">
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for p in patients %}
+<tr>
+<td>{{ p.id }}</td>
+<td>{{ p.name }}</td>
+<td>{{ p.email }}</td>
+<td>
+<a href="/adminpanel/patient/{{ p.id }}/"
+class="btn btn-sm btn-view">
+View
+</a>
+</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+
+<!-- Doctors -->
+<div class="tab-pane fade" id="doctors">
+
+<table class="table table-hover">
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for d in doctors %}
+<tr>
+<td>{{ d.id }}</td>
+<td>{{ d.name }}</td>
+<td>{{ d.email }}</td>
+<td>
+<a href="/adminpanel/doctor/{{ d.id }}/"
+class="btn btn-sm btn-view">
+View
+</a>
+</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,254 @@
+{% extends 'doctor/base.html' %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg shadow-sm px-4 py-3 mb-4"
+style="background: linear-gradient(90deg,#0f766e,#14b8a6); border-radius:18px;">
+
+<div class="container-fluid">
+
+<h4 class="text-white mb-0">Consultation</h4>
+
+<div class="ms-auto d-flex align-items-center">
+
+<span class="text-white me-4">
+Dr. {{ doctor.name }}
+</span>
+
+<a href="/doctor/dashboard/" class="btn btn-light btn-sm me-2">
+Dashboard
+</a>
+
+<a href="/doctor/logout/" class="btn btn-light btn-sm">
+Logout
+</a>
+
+</div>
+
+</div>
+</nav>
+
+<div class="row">
+
+<!-- LEFT SIDE -->
+<div class="col-md-7">
+
+<!-- Patient Info -->
+<div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+
+<h4>{{ patient.name }}</h4>
+
+<p class="mb-1"><strong>Age:</strong> {{ patient.age }}</p>
+<p class="mb-1"><strong>Gender:</strong> {{ patient.gender }}</p>
+<p class="mb-1"><strong>Email:</strong> {{ patient.email }}</p>
+<p class="mb-0"><strong>Phone:</strong> {{ patient.phone }}</p>
+
+</div>
+
+<!-- History Accordion -->
+<div class="accordion" id="historyAccordion">
+
+<!-- Past Appointments -->
+<div class="accordion-item mb-3 border-0 rounded-4 overflow-hidden">
+
+<h2 class="accordion-header">
+<button class="accordion-button"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#pastAppointments">
+
+Past Appointments
+
+</button>
+</h2>
+
+<div id="pastAppointments"
+class="accordion-collapse collapse show"
+data-bs-parent="#historyAccordion">
+
+<div class="accordion-body">
+
+{% for a in past_appointments %}
+<div class="border-bottom pb-2 mb-2">
+{{ a.date }} - {{ a.status }}
+</div>
+{% empty %}
+<p class="text-muted">No previous appointments</p>
+{% endfor %}
+
+</div>
+</div>
+</div>
+
+<!-- Prescriptions -->
+<div class="accordion-item mb-3 border-0 rounded-4 overflow-hidden">
+
+<h2 class="accordion-header">
+<button class="accordion-button collapsed"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#prescriptions">
+
+Previous Prescriptions
+
+</button>
+</h2>
+
+<div id="prescriptions"
+class="accordion-collapse collapse"
+data-bs-parent="#historyAccordion">
+
+<div class="accordion-body">
+
+{% for p in past_prescriptions %}
+<div class="border-bottom pb-2 mb-2">
+
+<strong>{{ p.date }}</strong><br>
+{{ p.medicine }}
+
+</div>
+{% empty %}
+<p class="text-muted">No prescriptions found</p>
+{% endfor %}
+
+</div>
+</div>
+</div>
+
+<!-- Reports -->
+<div class="accordion-item border-0 rounded-4 overflow-hidden">
+
+<h2 class="accordion-header">
+<button class="accordion-button collapsed"
+type="button"
+data-bs-toggle="collapse"
+data-bs-target="#reports">
+
+Reports
+
+</button>
+</h2>
+
+<div id="reports"
+class="accordion-collapse collapse"
+data-bs-parent="#historyAccordion">
+
+<div class="accordion-body">
+
+{% for r in past_reports %}
+
+<div class="border-bottom pb-3 mb-3">
+
+<strong>{{ r.date }}</strong><br>
+{{ r.report_name }}
+
+<br>
+<small class="text-muted" style="white-space:pre-line;">
+{{ r.result }}
+</small>
+
+</div>
+
+{% empty %}
+
+<p class="text-muted">No reports found</p>
+
+{% endfor %}
+
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="col-md-5">
+
+<!-- Add Prescription -->
+<div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+
+<h4 class="mb-3 text-success">Add Prescription</h4>
+
+<form method="POST">
+{% csrf_token %}
+
+<textarea
+name="medicine"
+rows="8"
+class="form-control mb-3"
+placeholder="Enter medicines, dosage, advice..."
+required></textarea>
+
+<button type="submit"
+name="save_prescription"
+class="btn btn-success w-100">
+
+Save Prescription
+
+</button>
+
+</form>
+
+</div>
+
+<!-- Add Report -->
+<div class="card p-4 mb-4 border-0 shadow-sm rounded-4">
+
+<h5 class="mb-3 text-primary">Add Report</h5>
+
+<form method="POST">
+{% csrf_token %}
+
+<input
+type="text"
+name="report_name"
+class="form-control mb-3"
+placeholder="Report Name"
+required>
+
+<textarea
+name="result"
+rows="6"
+class="form-control mb-3"
+placeholder="Enter report result/details..."
+required></textarea>
+
+<button
+type="submit"
+name="save_report"
+class="btn btn-primary w-100">
+
+Save Report
+
+</button>
+
+</form>
+
+</div>
+
+<!-- Mark Completed -->
+<div class="card p-4 border-0 shadow-sm rounded-4">
+
+<form method="POST">
+{% csrf_token %}
+
+<button
+type="submit"
+name="mark_completed"
+class="btn btn-outline-success w-100">
+
+Mark Completed
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
