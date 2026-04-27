@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6s0gw4(w25_$l$0pi-6s6zqdwp_@q5%2#ivmsynn(q^u=567-y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['aswathyshaji11p.pythonanywhere.com']
 
 
 # Application definition
@@ -74,12 +74,8 @@ WSGI_APPLICATION = 'ehospitality.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ehospitality_db',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
