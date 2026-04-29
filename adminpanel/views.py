@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from datetime import date
 
-from patient.models import Patient, Appointment, Prescription, Report
+from patient.models import Patient, Appointment, Prescription, Report, Bill
 from doctor.models import Doctor
 
 
@@ -298,6 +298,32 @@ def edit_facility(request, doctor_id):
         'adminpanel/edit_facility.html',
         {'doctor': doctor}
     )
+
+
+
+def add_bill(request):
+
+    if request.method == "POST":
+        patient_id = request.POST.get('patient')
+        description = request.POST.get('description')
+        amount = request.POST.get('amount')
+
+        patient = Patient.objects.get(id=patient_id)
+
+        Bill.objects.create(
+            patient=patient,
+            description=description,
+            amount=amount,
+            status="Unpaid"
+        )
+
+        return redirect('/adminpanel/dashboard/')
+
+    patients = Patient.objects.all()
+
+    return render(request, "adminpanel/add_bill.html", {
+        "patients": patients
+    })
 
 def logout_adminpanel(request):
     request.session.flush()

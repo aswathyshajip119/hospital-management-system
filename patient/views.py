@@ -1,9 +1,12 @@
-from django.shortcuts import render, redirect
-from .models import Patient, Prescription, Report
-from doctor.models import Doctor
-from .models import Appointment
-from datetime import date
+import stripe
+from django.shortcuts import render, redirect, get_object_or_404
 
+from ehospitality import settings
+from .models import Patient, Prescription, Report, Bill, Appointment
+from doctor.models import Doctor
+from datetime import date
+from django.contrib.auth.models import User
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 from django.shortcuts import render
@@ -87,14 +90,18 @@ def book_appointment(request):
 
 
 
+
+
 def patient_dashboard(request):
 
     patient_id = request.session.get('patient_id')
+    user_id = request.session.get('user_id')
 
     if not patient_id:
         return redirect('/login/')
 
     patient = Patient.objects.get(id=patient_id)
+
 
     today = date.today()
 
@@ -108,10 +115,13 @@ def patient_dashboard(request):
         date__lt=today
     ).order_by('-date')
 
-    return render(request, "patient/dashboard.html", { "patient": patient,"upcoming_appointments": upcoming_appointments,
-        "past_appointments": past_appointments
+    bills = Bill.objects.filter(patient=patient)
+    return render(request, "patient/dashboard.html", {
+        "patient": patient,
+        "upcoming_appointments": upcoming_appointments,
+        "past_appointments": past_appointments,
+        "bills": bills
     })
-
 
 def patient_prescriptions(request):
 
@@ -173,16 +183,44 @@ def cancel_appointment(request, appointment_id):
     return redirect('/dashboard/')
 
 
+def patient_bills(request):
+    bills = Bill.objects.all()
+    return render(request, 'patient/patient_bills.html', {'bills': bills})
 
 
 
+def pay_bill(request, bill_id):
+    bill = get_object_or_404(Bill, id=bill_id)
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=['card'],
+        line_items=[{
+            'price_data': {
+                'currency': 'inr',
+                'product_data': {
+                    'name': 'Hospital Bill',
+                },
+                'unit_amount': int(bill.amount * 100),
+            },
+            'quantity': 1,
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri(f"/payment-success/{bill.id}/"),
+        cancel_url=f"http://127.0.0.1:8000/payment-cancel/{bill.id}/",
+    )
+
+    return redirect(session.url)
 
 
+def payment_success(request, bill_id):
+    bill = get_object_or_404(Bill, id=bill_id)
+    bill.status = "Paid"
+    bill.save()
+    return redirect('patient_bills')
 
 
-
-
-
+def payment_cancel(request, bill_id):
+    return redirect('patient_bills')
 
 def logout_patient(request):
     request.session.flush()

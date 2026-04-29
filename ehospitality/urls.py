@@ -19,9 +19,10 @@ from django.urls import path
 
 from adminpanel.views import admin_login, user_management, admin_dashboard, patient_detail, delete_patient, \
     edit_patient, doctor_detail, delete_doctor, edit_doctor, appointment_management, edit_appointment, \
-    delete_appointment, facility_management, edit_facility, logout_adminpanel
+    delete_appointment, facility_management, edit_facility, logout_adminpanel, add_bill
 from patient.views import register_patient, patient_login, book_appointment, patient_dashboard, logout_patient, \
-    patient_prescriptions,cancel_appointment,patient_reports,home
+    patient_prescriptions, cancel_appointment, patient_reports, home, patient_bills, pay_bill, payment_success, \
+    payment_cancel
 from doctor.views import doctor_login, doctor_dashboard, doctor_consult, logout_doctor
 
 urlpatterns = [
@@ -34,11 +35,11 @@ urlpatterns = [
     path('prescriptions/', patient_prescriptions),
     path('cancel/<int:appointment_id>/', cancel_appointment),
     path('reports/', patient_reports, name='reports'),
+    path('patient/bills/', patient_bills, name='patient_bills'),
     path('doctor/login/', doctor_login, name='doctor_login'),
     path('doctor/dashboard/', doctor_dashboard, name='doctor_dashboard'),
     path('doctor/consult/<int:appointment_id>/',doctor_consult,name='doctor_consult'),
     path('adminpanel/login/', admin_login, name='adminpanel_login'),
-    path('adminpanel/login/', admin_login, name='admin_login'),
     path('adminpanel/dashboard/',admin_dashboard,name='admin_dashboard'),
     path('adminpanel/users/', user_management, name='user_management'),
     path('adminpanel/patient/<int:patient_id>/',patient_detail,name='patient_detail'),
@@ -52,6 +53,9 @@ urlpatterns = [
     path('adminpanel/appointment/delete/<int:appointment_id>/',delete_appointment,name='delete_appointment'),
     path('adminpanel/facility/',facility_management,name='facility_management'),
     path('adminpanel/facility/edit/<int:doctor_id>/',edit_facility,name='edit_facility'),
+    path('adminpanel/add-bill/', add_bill, name='add_bill'),
     path('doctor/logout/', logout_doctor, name='logout_doctor'),
     path('adminpanel/logout/',logout_adminpanel,name='admin_logout'),
-]
+    path('pay/<int:bill_id>/', pay_bill, name='pay_bill'),
+    path('payment-success/<int:bill_id>/', payment_success, name='payment_success'),
+    path('payment-cancel/<int:bill_id>/', payment_cancel, name='payment_cancel'),]

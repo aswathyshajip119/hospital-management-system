@@ -129,4 +129,59 @@ No appointment history
 
 </div>
 
+<!-- Bills Section -->
+
+<div class="card mt-4 p-4 shadow-sm border-0 rounded-4">
+
+<h4 class="mb-3 text-danger">My Bills</h4>
+
+<table class="table align-middle">
+
+<tr>
+<th>Description</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+{% for bill in bills %}
+
+<tr>
+
+<td>{{ bill.description }}</td>
+
+<td>₹{{ bill.amount }}</td>
+
+<td>
+    {% if bill.status == "Paid" %}
+        <span class="badge bg-success">Paid</span>
+    {% else %}
+        <span class="badge bg-warning text-dark">Unpaid</span>
+    {% endif %}
+</td>
+
+<td>
+    {% if bill.status == "Unpaid" %}
+        <a href="{% url 'pay_bill' bill.id %}" class="btn btn-sm btn-primary">
+            Pay Now
+        </a>
+    {% else %}
+        -
+    {% endif %}
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="4">No bills available</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
 {% endblock %}
