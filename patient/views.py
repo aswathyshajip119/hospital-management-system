@@ -35,7 +35,7 @@ def register_patient(request):
             address=address
         )
         messages.success(request, "Registration successful. Please login.")
-        return redirect('/patient-login/')
+        return redirect('/login/')
 
     return render(request, 'patient/register.html')
 
