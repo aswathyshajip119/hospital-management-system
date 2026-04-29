@@ -5,7 +5,8 @@ from ehospitality import settings
 from .models import Patient, Prescription, Report, Bill, Appointment
 from doctor.models import Doctor
 from datetime import date
-from django.contrib.auth.models import User
+from django.contrib import messages
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -33,6 +34,8 @@ def register_patient(request):
             email=email,
             address=address
         )
+        messages.success(request, "Registration successful. Please login.")
+        return redirect('/patient-login/')
 
     return render(request, 'patient/register.html')
 
